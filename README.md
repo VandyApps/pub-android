@@ -15,6 +15,10 @@ The server protocol we're using is RESTful. You can see an overview of the api h
 
 http://vandyapps.com:7070/
 
+And you can manipulate the server data here:
+
+http://vandyapps.com:7070/console
+
 To implement web functionality, we will rely in part on the Retrofit library created by Square, which turns RESTful API's into Java interfaces.
 
 http://square.github.io/retrofit/
@@ -25,7 +29,5 @@ http://jakewharton.github.io/butterknife/
 
 ## TODO
 
-- Create a Retrofit interface for our service
-- Modify the Service class to use the Retrofit interface
 - Enhance the GUI or add new features
-
+- Find out when the Service actually quits querying for data (because right now it looks like it never stops)
