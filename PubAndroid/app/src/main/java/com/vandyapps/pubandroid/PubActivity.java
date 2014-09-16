@@ -26,19 +26,25 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import static com.vandyapps.pubandroid.OrderResponse.Order;
+
 public class PubActivity extends Activity {
 
 	private static final String TAG = PubActivity.class.getName();
 
 	private AtomicBoolean mBound = new AtomicBoolean(false);
 	private ListView mListView;
-	private ArrayAdapter<String> mAdapter;
+	private ArrayAdapter<Integer> mAdapter;
 	private QueryService mService;
 	private Messenger mMessenger = new Messenger(new PubHandler(this));
-	private String mLastMsg = "";
+	private long mLastUpdated = -1;
 
 	private static class PubHandler extends Handler {
-		WeakReference<PubActivity> mReference;
+		/* We have to use a weak reference here to avoid memory leaks.
+         This happens when a message is left on the Looper queue that still has a reference
+         to our activity.
+        */
+        WeakReference<PubActivity> mReference;
 
 		PubHandler(PubActivity a) {
 			mReference = new WeakReference<PubActivity>(a);
@@ -51,7 +57,7 @@ public class PubActivity extends Activity {
 				return;
 			switch (msg.what) {
 			case Constants.NEW_DATA:
-				a.updateList((String) msg.obj);
+				a.updateList((List<Order>) msg.obj);
 				break;
 			default:
 				Log.e(TAG, "Got a message with unknown type: " + msg.what);
@@ -61,6 +67,9 @@ public class PubActivity extends Activity {
 
 	private ServiceConnection mServiceConnection = new ServiceConnection() {
 
+        /*
+        * This is called when the service we bound to is started.
+        */
 		@Override
 		public void onServiceConnected(ComponentName name, IBinder binder) {
 			QueryService.QueryBinder b = (QueryService.QueryBinder) binder;
@@ -82,7 +91,7 @@ public class PubActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_pub_app);
-		mAdapter = new ArrayAdapter<String>(this,
+		mAdapter = new ArrayAdapter<Integer>(this,
 				R.layout.list_item, R.id.list_item_tv);
 		mListView = (ListView) findViewById(R.id.number_list);
 		mListView.setAdapter(mAdapter);
@@ -131,17 +140,16 @@ public class PubActivity extends Activity {
 		dlg.show();
 	}
 
-	private void updateList(String nums) {
+	private void updateList(List<Order> orders) {
 		// Prevent refreshing when there's no new data
-		if (nums.equals(mLastMsg))
+		if (orders.isEmpty() || orders.get(0).getTimeCreated() <= mLastUpdated)
 			return;
-		Log.d(TAG, "Updating list with " + nums);
-		mLastMsg = nums;
-		List<String> list = Arrays.asList(nums.split(","));
-		Collections.reverse(list);
+		Log.d(TAG, "Updating list with " + orders.toString());
+		mLastUpdated = orders.get(0).getTimeCreated();
+
 		mAdapter.clear();
-		for (String s : list) {
-			mAdapter.add(s);
+		for (Order order : orders) {
+			mAdapter.add(order.getOrderNumber());
 		}
 	}
 

@@ -16,6 +16,8 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.Message;
@@ -25,85 +27,97 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
+import retrofit.RestAdapter;
+
+import static android.app.PendingIntent.getActivity;
+import static com.vandyapps.pubandroid.OrderResponse.Order;
+
 public class QueryService extends Service {
 
 	private static final String TAG = QueryService.class.getName();
 
+    // Used to schedule regular updates from the server.
 	private ScheduledExecutorService mSx = Executors
 			.newSingleThreadScheduledExecutor();
 	private IBinder mBinder = new QueryBinder();
-	private AtomicBoolean mBound = new AtomicBoolean(false);
+
+    // Is the activity bound to us?
+    private AtomicBoolean mBound = new AtomicBoolean(false);
+
+    // Is there a specific order we're looking for?
 	private AtomicBoolean mNotify = new AtomicBoolean(false);
 	private AtomicInteger mOrderNum = new AtomicInteger();
+
+    // Used to send messages back to the Activity.
 	private Messenger mMessenger;
-	private Runnable mQueryRunnable = new Runnable() {
+
+    // Configure the REST adapter.
+    private PubService pubService= new RestAdapter.Builder()
+            .setEndpoint(Constants.SERVER_ADDRESS)
+            .build().create(PubService.class);
+
+    private Runnable mQueryRunnable = new Runnable() {
 
 		@Override
 		public void run() {
-			if (mMessenger == null)
+
+            // If we don't have anyone to tell about new data, don't do anything.
+            if (mMessenger == null)
 				return;
-			Socket s = null;
-			PrintStream ps = null;
-			BufferedReader rdr = null;
+
 			try {
 				Log.d(TAG, "Querying for new data");
-				s = new Socket(Constants.SERVER_IP, Constants.SERVER_PORT);
-				ps = new PrintStream(s.getOutputStream());
-				rdr = new BufferedReader(new InputStreamReader(
-						s.getInputStream()));
-				ps.println("read");
-				ps.flush();
-				String line = rdr.readLine();
-				Log.d(TAG, "Got data: " + line);
-				Message m = Message.obtain();
+
+                OrderResponse response =
+                        pubService.getOrders(Constants.MAX_NUM_ORDERS, Constants.API_KEY);
+
+                if (!response.getStatus().equals("Okay")) {
+                    // The server didn't like our request.
+                    return;
+
+                    // TODO - turn off the service and throw an error.
+                }
+
+                Message m = Message.obtain();
 				m.what = Constants.NEW_DATA;
-				m.obj = line;
+				m.obj = response.getOrders();
 				mMessenger.send(m);
 				if (mNotify.get()) {
-					String orderNum = "" + mOrderNum.get();
-					String[] nums = line.split(",");
-					for (String str : nums) {
-						if (orderNum.equals(str)) {
-							Intent intent = new Intent(QueryService.this,
-									PubActivity.class);
+                    for (Order order : response.getOrders()) {
+						if (mOrderNum.get() == order.getOrderNumber()) {
+
+                            // Start building the notification.
 							NotificationCompat.Builder b = new NotificationCompat.Builder(
 									QueryService.this);
-							b.setSmallIcon(R.drawable.ic_launcher)
+
+                            // Make our notification pretty.
+                            b.setSmallIcon(R.drawable.ic_launcher)
 									.setTicker("Order ready")
 									.setContentTitle("Pub")
 									.setContentText("Your order is ready");
-							TaskStackBuilder stackBuilder = TaskStackBuilder
-									.create(QueryService.this);
-							stackBuilder.addParentStack(PubActivity.class);
-							stackBuilder.addNextIntent(intent);
-							PendingIntent resultPendingIntent = stackBuilder
-									.getPendingIntent(0,
-											PendingIntent.FLAG_UPDATE_CURRENT);
-							b.setContentIntent(resultPendingIntent);
+
+                            // Make our notification make noise
+                            Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                            b.setSound(alarmSound);
+
+                            // When they click on the notification, the Activity should open.
+                            Intent intent = new Intent(QueryService.this,
+                                    PubActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+							b.setContentIntent(getActivity(QueryService.this, 0, intent, 0));
+
+                            // When they click on the notification, it should go away.
+                            b.setAutoCancel(true);
+
+                            // Send the notification
 							NotificationManager nmgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 							nmgr.notify(Constants.ORDER_READY_NOTIFICATION,
 									b.build());
 						}
 					}
 				}
-			} catch (IOException e) {
-				Log.e(TAG, "IOException while querying server", e);
-			} catch (RemoteException e) {
-				Log.e(TAG, "", e);
-			} finally {
-				try {
-					if (s != null) {
-						s.close();
-					}
-					if (ps != null) {
-						ps.close();
-					}
-					if (rdr != null) {
-						rdr.close();
-					}
-				} catch (IOException e) {
-					Log.e(TAG, "Error while closing network IO", e);
-				}
+			} catch (Exception e) {
+				Log.e(TAG, "Exception while querying server", e);
 			}
 		}
 
