@@ -30,6 +30,7 @@ import android.util.Log;
 import retrofit.RestAdapter;
 
 import static android.app.PendingIntent.getActivity;
+import static android.app.PendingIntent.getService;
 import static com.vandyapps.pubandroid.OrderResponse.Order;
 
 public class QueryService extends Service {
@@ -129,6 +130,30 @@ public class QueryService extends Service {
 		}
 	}
 
+    /**
+     * This is only called when the user is asking us to stop our background activity.
+     */
+    @Override
+    public int onStartCommand (Intent intent, int flags, int startId) {
+        if (intent.getAction() == Constants.STOP_ACTION) {
+            // Stop querying the server
+            stopQueries();
+
+            // Tell the activity, if we necessary, to finish
+            if (mMessenger != null) {
+                Message msg = Message.obtain();
+                msg.what = Constants.STOP_REQUEST;
+                try {
+                    mMessenger.send(msg);
+                } catch (RemoteException e) {
+                    Log.e(TAG, "Couldn't send message from service.");
+                }
+            }
+        }
+
+        return START_NOT_STICKY;
+    }
+
 	@Override
 	public IBinder onBind(Intent intent) {
 		mBound.set(true);
@@ -156,6 +181,26 @@ public class QueryService extends Service {
 		}
 		mSx.scheduleAtFixedRate(mQueryRunnable, 0, Constants.REFRESH_RATE,
 				TimeUnit.SECONDS);
+
+        // Make users aware that we are constantly querying in the background.
+
+        // Start building the notification.
+        NotificationCompat.Builder b = new NotificationCompat.Builder(
+                QueryService.this);
+
+        // Make our notification pretty.
+        b.setSmallIcon(R.drawable.ic_launcher)
+                .setTicker("Checking Orders...")
+                .setContentTitle("Checking Orders...")
+                .setContentText("Click here to stop.");
+
+        // When they click on the notification, we should be flagged to stop everything.
+        Intent intent = new Intent(QueryService.this,
+                QueryService.class);
+        intent.setAction(Constants.STOP_ACTION);
+        b.setContentIntent(getService(QueryService.this, 0, intent, 0));
+
+        startForeground(1, b.build());
 	}
 
 	public void stopQueries() {
@@ -163,6 +208,9 @@ public class QueryService extends Service {
 			mSx.shutdown();
 			mSx = null;
 		}
+
+        stopForeground(true);
+        stopSelf();
 	}
 
 }

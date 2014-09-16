@@ -8,6 +8,8 @@ public interface Constants {
     String API_KEY = "bogus";
 	
 	int NEW_DATA = 1;
+    int STOP_REQUEST = 2;
+    String STOP_ACTION = "STOP";
 	int ORDER_READY_NOTIFICATION = 100;
 	
 }

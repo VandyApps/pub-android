@@ -59,6 +59,9 @@ public class PubActivity extends Activity {
 			case Constants.NEW_DATA:
 				a.updateList((List<Order>) msg.obj);
 				break;
+            case Constants.STOP_REQUEST:
+                a.finish();
+                break;
 			default:
 				Log.e(TAG, "Got a message with unknown type: " + msg.what);
 			}
