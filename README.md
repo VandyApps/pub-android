@@ -30,4 +30,3 @@ http://jakewharton.github.io/butterknife/
 ## TODO
 
 - Enhance the GUI or add new features
-- Find out when the Service actually quits querying for data (because right now it looks like it never stops)
