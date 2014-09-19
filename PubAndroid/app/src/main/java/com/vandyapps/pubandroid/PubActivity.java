@@ -26,6 +26,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
+
 import static com.vandyapps.pubandroid.OrderResponse.Order;
 
 public class PubActivity extends Activity {
@@ -33,7 +37,7 @@ public class PubActivity extends Activity {
 	private static final String TAG = PubActivity.class.getName();
 
 	private AtomicBoolean mBound = new AtomicBoolean(false);
-	private ListView mListView;
+	@InjectView(R.id.number_list) ListView mListView;
 	private ArrayAdapter<Integer> mAdapter;
 	private QueryService mService;
 	private Messenger mMessenger = new Messenger(new PubHandler(this));
@@ -94,12 +98,13 @@ public class PubActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_pub_app);
+        ButterKnife.inject(this);
 		mAdapter = new ArrayAdapter<Integer>(this,
 				R.layout.list_item, R.id.list_item_tv);
-		mListView = (ListView) findViewById(R.id.number_list);
 		mListView.setAdapter(mAdapter);
 		Intent i = new Intent(this, QueryService.class);
 		bindService(i, mServiceConnection, Context.BIND_AUTO_CREATE);
+
 	}
 
 	@Override
@@ -108,6 +113,7 @@ public class PubActivity extends Activity {
 		unbindService(mServiceConnection);
 	}
 
+    @OnClick(R.id.filter_button)
 	public void notifyClick(View v) {
 		if (!mBound.get())
 			return;

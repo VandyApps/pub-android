@@ -5,4 +5,5 @@
     android:id="@+id/list_item_tv"
     android:gravity="center"
     android:textColor="#FFFFFF"
-    android:textSize="22sp" />
+    android:textSize="22sp"
+   />

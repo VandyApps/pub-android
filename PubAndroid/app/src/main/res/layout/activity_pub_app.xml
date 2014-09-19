@@ -20,7 +20,6 @@
         android:text="@string/filter_button_text"
         android:textSize="24sp"
         android:textColor="@color/button_text_color"
-        android:onClick="notifyClick"
         android:background="@drawable/button_shape" />
 
 </LinearLayout>
