@@ -7,5 +7,12 @@
     <string name="order_prompt_text">Enter your order number</string>
     <string name="ok">Ok</string>
     <string name="cancel">Cancel</string>
-
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_pub_app">Pub App</string>
+    <string name="button_check_orders">Check Orders</string>
+    <string name="button_view_menu">View Menu</string>
+    <string name="button_view_hours">Pub Hours</string>
+    <string name="label_pub_status">Status: </string>
+    <string name="pub_status_closed">Closed</string>
+    <string name="pub_status_open">Open</string>
 </resources>

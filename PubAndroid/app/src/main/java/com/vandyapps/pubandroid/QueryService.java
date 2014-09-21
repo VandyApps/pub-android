@@ -1,10 +1,5 @@
 package com.vandyapps.pubandroid;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
-import java.net.Socket;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -12,7 +7,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -24,7 +18,6 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
 import retrofit.RestAdapter;
@@ -53,9 +46,9 @@ public class QueryService extends Service {
 	private Messenger mMessenger;
 
     // Configure the REST adapter.
-    private PubService pubService= new RestAdapter.Builder()
+    private ServerInterface serverInterface = new RestAdapter.Builder()
             .setEndpoint(Constants.SERVER_ADDRESS)
-            .build().create(PubService.class);
+            .build().create(ServerInterface.class);
 
     private Runnable mQueryRunnable = new Runnable() {
 
@@ -70,7 +63,7 @@ public class QueryService extends Service {
 				Log.d(TAG, "Querying for new data");
 
                 OrderResponse response =
-                        pubService.getOrders(Constants.MAX_NUM_ORDERS, Constants.API_KEY);
+                        serverInterface.getOrders(Constants.MAX_NUM_ORDERS, Constants.API_KEY);
 
                 if (!response.getStatus().equals("Okay")) {
                     // The server didn't like our request.
@@ -103,7 +96,7 @@ public class QueryService extends Service {
 
                             // When they click on the notification, the Activity should open.
                             Intent intent = new Intent(QueryService.this,
-                                    PubActivity.class);
+                                    OrderActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 							b.setContentIntent(getActivity(QueryService.this, 0, intent, 0));
 
