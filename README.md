@@ -29,4 +29,8 @@ http://jakewharton.github.io/butterknife/
 
 ## TODO
 
-- Enhance the GUI or add new features
+- Style the main UI
+- Make a "view menu" pop-up dialog.
+- Make a "view hours" pop-up dialog. (note: hard code these in... no web scraping)
+- Add support for tracking multiple orders at once.
+- Don't let users check orders if the pub is closed.
