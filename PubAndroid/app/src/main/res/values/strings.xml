@@ -8,7 +8,7 @@
     <string name="ok">Ok</string>
     <string name="cancel">Cancel</string>
     <string name="title_activity_main">MainActivity</string>
-    <string name="title_pub_app">Pub App</string>
+    <string name="title_pub_app">The Pub</string>
     <string name="button_check_orders">Check Orders</string>
     <string name="button_view_menu">View Menu</string>
     <string name="button_view_hours">Pub Hours</string>
