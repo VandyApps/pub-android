@@ -3,7 +3,7 @@
 
     <string name="app_name">PubApp</string>
     <string name="action_settings">Settings</string>
-    <string name="filter_button_text">Notify Me</string>
+    <string name="filter_button_text">Take My Order</string>
     <string name="order_prompt_text">Enter your order number</string>
     <string name="ok">Ok</string>
     <string name="cancel">Cancel</string>

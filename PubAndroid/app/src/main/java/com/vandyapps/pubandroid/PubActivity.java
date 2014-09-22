@@ -24,6 +24,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import butterknife.ButterKnife;
@@ -37,8 +38,8 @@ public class PubActivity extends Activity {
 	private static final String TAG = PubActivity.class.getName();
 
 	private AtomicBoolean mBound = new AtomicBoolean(false);
-	@InjectView(R.id.number_list) ListView mListView;
-	private ArrayAdapter<Integer> mAdapter;
+	@InjectView (R.id.number_list) ListView mListView;
+	private ArrayAdapter<String> mAdapter;
 	private QueryService mService;
 	private Messenger mMessenger = new Messenger(new PubHandler(this));
 	private long mLastUpdated = -1;
@@ -99,7 +100,7 @@ public class PubActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_pub_app);
         ButterKnife.inject(this);
-		mAdapter = new ArrayAdapter<Integer>(this,
+		mAdapter = new ArrayAdapter<String>(this,
 				R.layout.list_item, R.id.list_item_tv);
 		mListView.setAdapter(mAdapter);
 		Intent i = new Intent(this, QueryService.class);
@@ -158,7 +159,7 @@ public class PubActivity extends Activity {
 
 		mAdapter.clear();
 		for (Order order : orders) {
-			mAdapter.add(order.getOrderNumber());
+			mAdapter.add(" " + order.getOrderNumber() + "at " + mLastUpdated);
 		}
 	}
 
