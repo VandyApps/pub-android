@@ -39,7 +39,7 @@ public class PubActivity extends Activity {
 
 	private AtomicBoolean mBound = new AtomicBoolean(false);
 	@InjectView (R.id.number_list) ListView mListView;
-	private ArrayAdapter<String> mAdapter;
+	private ArrayAdapter<Integer> mAdapter;
 	private QueryService mService;
 	private Messenger mMessenger = new Messenger(new PubHandler(this));
 	private long mLastUpdated = -1;
@@ -100,7 +100,7 @@ public class PubActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_pub_app);
         ButterKnife.inject(this);
-		mAdapter = new ArrayAdapter<String>(this,
+		mAdapter = new ArrayAdapter<Integer>(this,
 				R.layout.list_item, R.id.list_item_tv);
 		mListView.setAdapter(mAdapter);
 		Intent i = new Intent(this, QueryService.class);
@@ -159,7 +159,7 @@ public class PubActivity extends Activity {
 
 		mAdapter.clear();
 		for (Order order : orders) {
-			mAdapter.add(" " + order.getOrderNumber() + "at " + mLastUpdated);
+			mAdapter.add(order.getOrderNumber());
 		}
 	}
 
