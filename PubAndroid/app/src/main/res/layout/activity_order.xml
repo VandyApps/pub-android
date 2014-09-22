@@ -6,7 +6,8 @@
     android:background="@color/background_color"
     android:orientation="vertical"
     tools:context="edu.vanderbilt.pubapp.PubActivity" >
-    
+
+
     <ListView
         android:id="@+id/number_list"
         android:layout_width="match_parent"

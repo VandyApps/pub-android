@@ -22,6 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import butterknife.ButterKnife;
@@ -35,7 +36,7 @@ public class OrderActivity extends Activity {
 	private static final String TAG = OrderActivity.class.getName();
 
 	private AtomicBoolean mBound = new AtomicBoolean(false);
-	@InjectView(R.id.number_list) ListView mListView;
+	@InjectView (R.id.number_list) ListView mListView;
 	private ArrayAdapter<Integer> mAdapter;
 	private QueryService mService;
 	private Messenger mMessenger = new Messenger(new PubHandler(this));
