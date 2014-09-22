@@ -28,22 +28,22 @@ import static com.vandyapps.pubandroid.OrderResponse.Order;
 
 public class QueryService extends Service {
 
-	private static final String TAG = QueryService.class.getName();
+    private static final String TAG = QueryService.class.getName();
 
     // Used to schedule regular updates from the server.
-	private ScheduledExecutorService mSx = Executors
-			.newSingleThreadScheduledExecutor();
-	private IBinder mBinder = new QueryBinder();
+    private ScheduledExecutorService mSx = Executors
+            .newSingleThreadScheduledExecutor();
+    private IBinder mBinder = new QueryBinder();
 
     // Is the activity bound to us?
     private AtomicBoolean mBound = new AtomicBoolean(false);
 
     // Is there a specific order we're looking for?
-	private AtomicBoolean mNotify = new AtomicBoolean(false);
-	private AtomicInteger mOrderNum = new AtomicInteger();
+    private AtomicBoolean mNotify = new AtomicBoolean(false);
+    private AtomicInteger mOrderNum = new AtomicInteger();
 
     // Used to send messages back to the Activity.
-	private Messenger mMessenger;
+    private Messenger mMessenger;
 
     // Configure the REST adapter.
     private ServerInterface serverInterface = new RestAdapter.Builder()
@@ -52,15 +52,15 @@ public class QueryService extends Service {
 
     private Runnable mQueryRunnable = new Runnable() {
 
-		@Override
-		public void run() {
+        @Override
+        public void run() {
 
             // If we don't have anyone to tell about new data, don't do anything.
             if (mMessenger == null)
-				return;
+                return;
 
-			try {
-				Log.d(TAG, "Querying for new data");
+            try {
+                Log.d(TAG, "Querying for new data");
 
                 OrderResponse response =
                         serverInterface.getOrders(Constants.MAX_NUM_ORDERS, Constants.API_KEY);
@@ -73,22 +73,22 @@ public class QueryService extends Service {
                 }
 
                 Message m = Message.obtain();
-				m.what = Constants.NEW_DATA;
-				m.obj = response.getOrders();
-				mMessenger.send(m);
-				if (mNotify.get()) {
+                m.what = Constants.NEW_DATA;
+                m.obj = response.getOrders();
+                mMessenger.send(m);
+                if (mNotify.get()) {
                     for (Order order : response.getOrders()) {
-						if (mOrderNum.get() == order.getOrderNumber()) {
+                        if (mOrderNum.get() == order.getOrderNumber()) {
 
                             // Start building the notification.
-							NotificationCompat.Builder b = new NotificationCompat.Builder(
-									QueryService.this);
+                            NotificationCompat.Builder b = new NotificationCompat.Builder(
+                                    QueryService.this);
 
                             // Make our notification pretty.
                             b.setSmallIcon(R.drawable.ic_launcher)
-									.setTicker("Order ready")
-									.setContentTitle("Pub")
-									.setContentText("Your order is ready");
+                                    .setTicker("Order ready")
+                                    .setContentTitle("Pub")
+                                    .setContentText("Your order is ready");
 
                             // Make our notification make noise
                             Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -98,36 +98,36 @@ public class QueryService extends Service {
                             Intent intent = new Intent(QueryService.this,
                                     OrderActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-							b.setContentIntent(getActivity(QueryService.this, 0, intent, 0));
+                            b.setContentIntent(getActivity(QueryService.this, 0, intent, 0));
 
                             // When they click on the notification, it should go away.
                             b.setAutoCancel(true);
 
                             // Send the notification
-							NotificationManager nmgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-							nmgr.notify(Constants.ORDER_READY_NOTIFICATION,
-									b.build());
-						}
-					}
-				}
-			} catch (Exception e) {
-				Log.e(TAG, "Exception while querying server", e);
-			}
-		}
+                            NotificationManager nmgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                            nmgr.notify(Constants.ORDER_READY_NOTIFICATION,
+                                    b.build());
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Exception while querying server", e);
+            }
+        }
 
-	};
+    };
 
-	public class QueryBinder extends Binder {
-		public QueryService getService() {
-			return QueryService.this;
-		}
-	}
+    public class QueryBinder extends Binder {
+        public QueryService getService() {
+            return QueryService.this;
+        }
+    }
 
     /**
      * This is only called when the user is asking us to stop our background activity.
      */
     @Override
-    public int onStartCommand (Intent intent, int flags, int startId) {
+    public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent.getAction() == Constants.STOP_ACTION) {
             // Stop querying the server
             stopQueries();
@@ -147,33 +147,33 @@ public class QueryService extends Service {
         return START_NOT_STICKY;
     }
 
-	@Override
-	public IBinder onBind(Intent intent) {
-		mBound.set(true);
-		return mBinder;
-	}
+    @Override
+    public IBinder onBind(Intent intent) {
+        mBound.set(true);
+        return mBinder;
+    }
 
-	@Override
-	public boolean onUnbind(Intent intent) {
-		stopQueries();
-		return false;
-	}
+    @Override
+    public boolean onUnbind(Intent intent) {
+        stopQueries();
+        return false;
+    }
 
-	public void setMessenger(Messenger m) {
-		mMessenger = m;
-	}
+    public void setMessenger(Messenger m) {
+        mMessenger = m;
+    }
 
-	public void setNotify(int n) {
-		mOrderNum.set(n);
-		mNotify.set(true);
-	}
+    public void setNotify(int n) {
+        mOrderNum.set(n);
+        mNotify.set(true);
+    }
 
-	public void startQueries() {
-		if (mSx == null) {
-			mSx = Executors.newSingleThreadScheduledExecutor();
-		}
-		mSx.scheduleAtFixedRate(mQueryRunnable, 0, Constants.REFRESH_RATE,
-				TimeUnit.SECONDS);
+    public void startQueries() {
+        if (mSx == null) {
+            mSx = Executors.newSingleThreadScheduledExecutor();
+        }
+        mSx.scheduleAtFixedRate(mQueryRunnable, 0, Constants.REFRESH_RATE,
+                TimeUnit.SECONDS);
 
         // Make users aware that we are constantly querying in the background.
 
@@ -194,16 +194,16 @@ public class QueryService extends Service {
         b.setContentIntent(getService(QueryService.this, 0, intent, 0));
 
         startForeground(1, b.build());
-	}
+    }
 
-	public void stopQueries() {
-		if (mSx != null) {
-			mSx.shutdown();
-			mSx = null;
-		}
+    public void stopQueries() {
+        if (mSx != null) {
+            mSx.shutdown();
+            mSx = null;
+        }
 
         stopForeground(true);
         stopSelf();
-	}
+    }
 
 }

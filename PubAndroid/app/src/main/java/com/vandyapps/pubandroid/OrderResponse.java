@@ -4,7 +4,7 @@ import java.util.List;
 
 /**
  * A POJO representation of the JSON we receive from the server.
- *
+ * <p/>
  * We've structured this so that Retrofit's default GSON converter will
  * automatically demarshall the JSON response into this object.
  */
