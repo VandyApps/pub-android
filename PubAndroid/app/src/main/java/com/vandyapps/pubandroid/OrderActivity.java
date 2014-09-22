@@ -1,8 +1,6 @@
 package com.vandyapps.pubandroid;
 
 import java.lang.ref.WeakReference;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -26,14 +24,18 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
+
 import static com.vandyapps.pubandroid.OrderResponse.Order;
 
-public class PubActivity extends Activity {
+public class OrderActivity extends Activity {
 
-	private static final String TAG = PubActivity.class.getName();
+	private static final String TAG = OrderActivity.class.getName();
 
 	private AtomicBoolean mBound = new AtomicBoolean(false);
-	private ListView mListView;
+	@InjectView(R.id.number_list) ListView mListView;
 	private ArrayAdapter<Integer> mAdapter;
 	private QueryService mService;
 	private Messenger mMessenger = new Messenger(new PubHandler(this));
@@ -44,15 +46,15 @@ public class PubActivity extends Activity {
          This happens when a message is left on the Looper queue that still has a reference
          to our activity.
         */
-        WeakReference<PubActivity> mReference;
+        WeakReference<OrderActivity> mReference;
 
-		PubHandler(PubActivity a) {
-			mReference = new WeakReference<PubActivity>(a);
+		PubHandler(OrderActivity a) {
+			mReference = new WeakReference<OrderActivity>(a);
 		}
 
 		@Override
 		public void handleMessage(Message msg) {
-			PubActivity a = mReference.get();
+			OrderActivity a = mReference.get();
 			if (a == null)
 				return;
 			switch (msg.what) {
@@ -93,13 +95,14 @@ public class PubActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_pub_app);
+		setContentView(R.layout.activity_order);
+        ButterKnife.inject(this);
 		mAdapter = new ArrayAdapter<Integer>(this,
 				R.layout.list_item, R.id.list_item_tv);
-		mListView = (ListView) findViewById(R.id.number_list);
 		mListView.setAdapter(mAdapter);
 		Intent i = new Intent(this, QueryService.class);
 		bindService(i, mServiceConnection, Context.BIND_AUTO_CREATE);
+
 	}
 
 	@Override
@@ -108,6 +111,7 @@ public class PubActivity extends Activity {
 		unbindService(mServiceConnection);
 	}
 
+    @OnClick(R.id.filter_button)
 	public void notifyClick(View v) {
 		if (!mBound.get())
 			return;
@@ -127,7 +131,7 @@ public class PubActivity extends Activity {
 					int orderNum = Integer.parseInt(input);
 					mService.setNotify(orderNum);
 				} catch (NumberFormatException e) {
-					Toast.makeText(PubActivity.this, "Please enter a number",
+					Toast.makeText(OrderActivity.this, "Please enter a number",
 							Toast.LENGTH_LONG).show();
 				}
 				dlg.dismiss();
