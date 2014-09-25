@@ -27,4 +27,10 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
+    public void checkMenuClicked(View v) {
+        // Start the order checking activity.
+        startActivity(new Intent(this, PubMenu.class));
+
+    }
+
 }
