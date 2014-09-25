@@ -1,70 +1,83 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@drawable/brick_background"
-    android:gravity="center_horizontal"
-    tools:context="com.vandyapps.pubandroid.MainActivity">
+>
 
-    <View
-        android:layout_width="1dp"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-    />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@drawable/brick_background"
+        android:gravity="center_horizontal"
+        tools:context="com.vandyapps.pubandroid.MainActivity">
 
-    <ImageView
-        android:layout_width="238dp"
-        android:layout_height="197dp"
-        android:adjustViewBounds="true"
-        android:src="@drawable/pub_title" />
-
-    <View
-        android:layout_width="1dp"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        <View
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
         />
 
-    <ImageButton
-        android:id="@+id/button_orders"
-        android:onClick="checkOrdersClicked"
-        android:layout_width="202dp"
-        android:layout_height="86dp"
-        android:background="@android:color/transparent"
-        android:scaleType="fitCenter"
-        android:src="@drawable/orders_button"/>
+        <ImageView
+            android:layout_width="238dp"
+            android:layout_height="197dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/pub_title" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            />
+
+        <ImageButton
+            android:id="@+id/button_orders"
+            android:onClick="checkOrdersClicked"
+            android:layout_width="202dp"
+            android:layout_height="86dp"
+            android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
+            android:src="@drawable/orders_button"/>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            />
+
+        <ImageButton
+            android:id="@+id/button_menu"
+            android:layout_width="216dp"
+            android:layout_height="85dp"
+            android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
+            android:src="@drawable/menu_button"/>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            />
+
+        <ImageButton
+            android:id="@+id/button_hours"
+            android:layout_width="195dp"
+            android:layout_height="83dp"
+            android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
+            android:src="@drawable/hours_button"/>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            />
+    </LinearLayout>
 
     <View
-        android:layout_width="1dp"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/shadow_shape"
         />
-
-    <ImageButton
-        android:id="@+id/button_menu"
-        android:layout_width="216dp"
-        android:layout_height="85dp"
-        android:background="@android:color/transparent"
-        android:scaleType="fitCenter"
-        android:src="@drawable/menu_button"/>
-
-    <View
-        android:layout_width="1dp"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        />
-
-    <ImageButton
-        android:id="@+id/button_hours"
-        android:layout_width="195dp"
-        android:layout_height="83dp"
-        android:background="@android:color/transparent"
-        android:scaleType="fitCenter"
-        android:src="@drawable/hours_button"/>
-
-    <View
-        android:layout_width="1dp"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        />
-</LinearLayout>
+</RelativeLayout>
