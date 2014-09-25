@@ -11,6 +11,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -100,6 +101,12 @@ public class OrderActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
         ButterKnife.inject(this);
+
+        // We have to set our custom font here because apparently
+        // there's no way to do it in xml
+        Typeface myTypeface = Typeface.createFromAsset(getAssets(), "dotmatrix.tff");
+        mTextView.setTypeface(myTypeface);
+
         Intent i = new Intent(this, QueryService.class);
         bindService(i, mServiceConnection, Context.BIND_AUTO_CREATE);
 

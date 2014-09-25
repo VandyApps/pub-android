@@ -20,7 +20,6 @@
             android:background="@android:color/black"
             android:padding="5dp"
             android:textColor="#FF0000"
-            android:text="1576   5541   7778"
             android:layout_height="wrap_content"
             android:textSize="20dp"
             android:typeface="monospace" />

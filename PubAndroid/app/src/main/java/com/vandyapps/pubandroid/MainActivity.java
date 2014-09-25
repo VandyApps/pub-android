@@ -25,7 +25,6 @@ public class MainActivity extends ActionBarActivity {
     public void checkOrdersClicked(View v) {
         // Start the order checking activity.
         startActivity(new Intent(this, OrderActivity.class));
-
     }
 
 }
