@@ -1,16 +1,17 @@
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/brick_background"
 >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@drawable/brick_background"
         android:gravity="center_horizontal"
+        android:background="@drawable/shadow_shape"
         tools:context="com.vandyapps.pubandroid.MainActivity">
 
         <View
@@ -75,9 +76,4 @@
             />
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/shadow_shape"
-        />
-</RelativeLayout>
+</LinearLayout>
