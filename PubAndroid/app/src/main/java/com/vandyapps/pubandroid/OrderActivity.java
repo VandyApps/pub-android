@@ -1,6 +1,7 @@
 package com.vandyapps.pubandroid;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -37,8 +38,8 @@ public class OrderActivity extends Activity {
 
     private AtomicBoolean mBound = new AtomicBoolean(false);
     @InjectView(R.id.number_list)
-    ListView mListView;
-    private ArrayAdapter<Integer> mAdapter;
+    TextView mTextView;
+    private List<Order> mOrders;
     private QueryService mService;
     private Messenger mMessenger = new Messenger(new PubHandler(this));
     private long mLastUpdated = -1;
@@ -99,9 +100,6 @@ public class OrderActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
         ButterKnife.inject(this);
-        mAdapter = new ArrayAdapter<Integer>(this,
-                R.layout.list_item, R.id.list_item_tv);
-        mListView.setAdapter(mAdapter);
         Intent i = new Intent(this, QueryService.class);
         bindService(i, mServiceConnection, Context.BIND_AUTO_CREATE);
 
@@ -151,14 +149,15 @@ public class OrderActivity extends Activity {
 
     private void updateList(List<Order> orders) {
         // Prevent refreshing when there's no new data
-        if (orders.isEmpty() || orders.get(0).getTimeCreated() <= mLastUpdated)
-            return;
-        Log.d(TAG, "Updating list with " + orders.toString());
-        mLastUpdated = orders.get(0).getTimeCreated();
+        //if (orders.isEmpty() || orders.get(0).getTimeCreated() <= mLastUpdated)
+         //   return;
+        //Log.d(TAG, "Updating list with " + orders.toString());
+        //mLastUpdated = orders.get(0).getTimeCreated();
 
-        mAdapter.clear();
+        mOrders = orders;
+        mTextView.setText("");
         for (Order order : orders) {
-            mAdapter.add(order.getOrderNumber());
+            mTextView.append(String.valueOf(order.getOrderNumber()) + "   ");
         }
     }
 

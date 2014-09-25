@@ -3,25 +3,44 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/pub_display"
+    android:background="@drawable/brick_background"
     android:orientation="vertical"
-    android:gravity="center_horizontal"
     tools:context="edu.vanderbilt.pubapp.PubActivity">
 
-
-    <ListView
-        android:id="@+id/number_list"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_weight="100"
-        android:layout_height="0dp" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:background="@drawable/shadow_shape">
 
-    <Button
-        android:id="@+id/filter_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/filter_button_text"
-        android:textSize="24sp"
-        android:textColor="@color/button_text_color"
-        android:background="@drawable/button_shape" />
+        <TextView
+            android:id="@+id/number_list"
+            android:layout_width="match_parent"
+            android:background="@android:color/black"
+            android:padding="5dp"
+            android:textColor="#FF0000"
+            android:text="1576   5541   7778"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:typeface="monospace" />
 
+        <View
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            />
+
+
+        <Button
+            android:id="@+id/filter_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/filter_button_text"
+            android:textSize="24sp"
+            android:textColor="@color/button_text_color"
+            android:background="@drawable/button_shape"
+            android:layout_gravity="bottom" />
+
+        </LinearLayout>
 </LinearLayout>
