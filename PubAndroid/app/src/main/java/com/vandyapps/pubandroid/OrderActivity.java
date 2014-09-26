@@ -40,6 +40,11 @@ public class OrderActivity extends Activity {
     private AtomicBoolean mBound = new AtomicBoolean(false);
     @InjectView(R.id.number_list)
     TextView mTextView;
+    @InjectView(R.id.listview_my_orders)
+    ListView mListView;
+    @InjectView(R.id.edittext_new_order)
+    EditText mEditText;
+    private ArrayAdapter<Integer> mWatching;
     private List<Order> mOrders;
     private QueryService mService;
     private Messenger mMessenger = new Messenger(new PubHandler(this));
@@ -104,8 +109,15 @@ public class OrderActivity extends Activity {
 
         // We have to set our custom font here because apparently
         // there's no way to do it in xml
-        Typeface myTypeface = Typeface.createFromAsset(getAssets(), "dotmatrix.tff");
-        mTextView.setTypeface(myTypeface);
+        try{
+            Typeface myTypeface = Typeface.createFromAsset(getAssets(), "dotmatrix.tff");
+            mTextView.setTypeface(myTypeface);
+        }
+        catch (Exception e) {} // Just eat exceptions. Not having that font is no big deal.
+
+        // Setup the listview & adapter
+        mWatching = new ArrayAdapter<Integer>(this, R.layout.list_item);
+        mListView.setAdapter(mWatching);
 
         Intent i = new Intent(this, QueryService.class);
         bindService(i, mServiceConnection, Context.BIND_AUTO_CREATE);
@@ -118,42 +130,6 @@ public class OrderActivity extends Activity {
         unbindService(mServiceConnection);
     }
 
-    @OnClick(R.id.filter_button)
-    public void notifyClick(View v) {
-        if (!mBound.get())
-            return;
-        final Dialog dlg = new Dialog(this);
-        dlg.setContentView(R.layout.dialog_order_prompt);
-        dlg.setTitle(R.string.order_prompt_text);
-        final EditText et = (EditText) dlg.findViewById(R.id.prompt_et);
-        final Button ok = (Button) dlg.findViewById(R.id.prompt_ok_button);
-        final Button cancel = (Button) dlg
-                .findViewById(R.id.prompt_cancel_button);
-        ok.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                String input = et.getText().toString();
-                try {
-                    int orderNum = Integer.parseInt(input);
-                    mService.setNotify(orderNum);
-                } catch (NumberFormatException e) {
-                    Toast.makeText(OrderActivity.this, "Please enter a number",
-                            Toast.LENGTH_LONG).show();
-                }
-                dlg.dismiss();
-            }
-
-        });
-        cancel.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dlg.dismiss();
-            }
-        });
-        dlg.show();
-    }
-
     private void updateList(List<Order> orders) {
         // Prevent refreshing when there's no new data
         //if (orders.isEmpty() || orders.get(0).getTimeCreated() <= mLastUpdated)
@@ -164,8 +140,33 @@ public class OrderActivity extends Activity {
         mOrders = orders;
         mTextView.setText("");
         for (Order order : orders) {
-            mTextView.append(String.valueOf(order.getOrderNumber()) + "   ");
+            mTextView.append(String.valueOf(order.getOrderNumber()) + " ");
+
+            // TODO - Do something special if we find the order we were looking for.
         }
+    }
+
+    // Called when a user is adding a new order to watch for.
+    @OnClick(R.id.button_add_order)
+    public void addOrder() {
+        int orderNum;
+        try {
+            orderNum = Integer.parseInt(mEditText.getText().toString());
+        } catch (NumberFormatException e) {
+            Toast.makeText(OrderActivity.this, "Please enter a number",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        // Add whatever's in the textbox to the list of orders we're watching.
+        mWatching.add(orderNum);
+        mWatching.notifyDataSetChanged();
+
+        // Tell the service we're looking for another order
+        mService.setNotify(orderNum);
+
+        // Clear the edit text
+        mEditText.setText("");
     }
 
 }
