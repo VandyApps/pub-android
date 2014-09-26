@@ -68,7 +68,6 @@
 
         <ImageButton
             android:id="@+id/button_orders"
-            android:onClick="checkOrdersClicked"
             android:layout_width="202dp"
             android:layout_height="86dp"
             android:background="@android:color/transparent"
