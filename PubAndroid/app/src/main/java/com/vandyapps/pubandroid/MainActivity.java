@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
@@ -19,9 +20,12 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ButterKnife.inject(this);
     }
 
 
+    @OnClick(R.id.button_orders)
     public void checkOrdersClicked(View v) {
         // Start the order checking activity.
         startActivity(new Intent(this, OrderActivity.class));

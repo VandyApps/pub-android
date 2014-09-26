@@ -14,32 +14,34 @@
         android:padding="10dp"
         android:background="@drawable/shadow_shape">
 
-        <TextView
-            android:id="@+id/number_list"
-            android:layout_width="match_parent"
-            android:background="@android:color/black"
-            android:padding="5dp"
-            android:textColor="#FF0000"
+        <ScrollView
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:typeface="monospace" />
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/number_list"
+                android:layout_width="match_parent"
+                android:background="@android:color/black"
+                android:padding="5dp"
+                android:textColor="#FF0000"
+                android:layout_height="wrap_content"
+                android:textSize="30dp"
+                android:text="1244   5555   5555  2222"
+                android:typeface="monospace" />
+        </ScrollView>
 
-        <View
-            android:layout_width="1dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            />
-
-
-        <Button
-            android:id="@+id/filter_button"
-            android:layout_width="match_parent"
+        <ScrollView
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/filter_button_text"
-            android:textSize="24sp"
-            android:textColor="@color/button_text_color"
-            android:background="@drawable/button_shape"
-            android:layout_gravity="bottom" />
+            android:layout_weight="1">
 
-        </LinearLayout>
+            <ImageView
+                android:layout_width="149dp"
+                android:layout_height="123dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/my_orders_sign"
+                android:id="@+id/" />
+
+        </ScrollView>
+    </LinearLayout>
 </LinearLayout>
