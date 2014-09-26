@@ -94,13 +94,14 @@ public class QueryService extends Service {
                 if (!mWatching.isEmpty()) {
                     for (Order order : response.getOrders()) {
                         if (mWatching.contains(order.getOrderNumber())) {
+                            int orderNum = order.getOrderNumber();
+
                             // Remove the order from the list.
-                            removeNotify(order.getOrderNumber());
+                            removeNotify(orderNum);
 
                             // Send a notification to tell them their order is ready.
                             NotificationManager nmgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                            nmgr.notify(Constants.ORDER_READY_NOTIFICATION,
-                                    makeOrderReadyNotificaiton(order.getOrderNumber()));
+                            nmgr.notify(orderNum, makeOrderReadyNotificaiton(orderNum));
                         }
                     }
                 }
