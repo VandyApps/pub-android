@@ -39,13 +39,37 @@
             android:src="@drawable/my_orders_sign"
             />
 
-        <ListView
-            android:id="@+id/listview_my_orders"
+        <HorizontalScrollView
             android:layout_width="fill_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            />
+            android:layout_weight="1">
+            <LinearLayout
+                android:id="@+id/layout_receipt_holder"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+               >
+            <LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:gravity="center"
+                android:background="@drawable/receipt">
+                <TextView
+                    android:id="@+id/receipt_item_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingLeft="15dp"
+                    android:gravity="center"
+                    android:text="test"
+                    android:background="@drawable/shadow_shape"
+                    android:textColor="@android:color/black"
+                    android:textSize="22sp" />
+            </LinearLayout>
+            </LinearLayout>
+            </HorizontalScrollView>
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -60,7 +84,8 @@
                 android:background="@android:color/white"
                 android:inputType="number"
                 android:layout_weight="1"
-                />
+                android:hint="Enter your order number..."
+            />
 
             <ImageButton
                 android:id="@+id/button_add_order"
