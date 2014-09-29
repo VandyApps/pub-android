@@ -1,12 +1,12 @@
 package com.vandyapps.pubandroid;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -18,11 +18,9 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,15 +38,13 @@ public class OrderActivity extends Activity {
     private AtomicBoolean mBound = new AtomicBoolean(false);
     @InjectView(R.id.number_list)
     TextView mTextView;
-    @InjectView(R.id.listview_my_orders)
-    ListView mListView;
+    @InjectView(R.id.layout_receipt_holder)
+    LinearLayout mLinearLayout;
     @InjectView(R.id.edittext_new_order)
     EditText mEditText;
-    private ArrayAdapter<Integer> mWatching;
     private List<Order> mOrders;
     private QueryService mService;
     private Messenger mMessenger = new Messenger(new PubHandler(this));
-    private long mLastUpdated = -1;
 
     private static class PubHandler extends Handler {
         /* We have to use a weak reference here to avoid memory leaks.
@@ -90,7 +86,13 @@ public class OrderActivity extends Activity {
             mService = b.getService();
             mBound.set(true);
             mService.setMessenger(mMessenger);
-            mService.startQueries();
+
+            // Get the orders that the service is watching for. This is our base
+            // truth.
+            mLinearLayout.removeAllViews();
+            for (Integer i : mService.getWatching())
+                addReceiptToList(i);
+
         }
 
         @Override
@@ -114,19 +116,21 @@ public class OrderActivity extends Activity {
             mTextView.setTypeface(myTypeface);
         }
         catch (Exception e) {} // Just eat exceptions. Not having that font is no big deal.
-
-        // Setup the listview & adapter
-        mWatching = new ArrayAdapter<Integer>(this, R.layout.list_item);
-        mListView.setAdapter(mWatching);
-
-        Intent i = new Intent(this, QueryService.class);
-        bindService(i, mServiceConnection, Context.BIND_AUTO_CREATE);
-
     }
 
+    // Bind to the service when we're visible.
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onResume () {
+        super.onResume();
+        Intent i = new Intent(this, QueryService.class);
+        bindService(i, mServiceConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    // Unbind when we're not. We don't want the service querying if the activity isn't visible
+    // (but it will if we started the service in the foreground earlier).
+    @Override
+    protected void onPause() {
+        super.onPause();
         unbindService(mServiceConnection);
     }
 
@@ -140,15 +144,23 @@ public class OrderActivity extends Activity {
         mOrders = orders;
         mTextView.setText("");
         for (Order order : orders) {
-            mTextView.append(String.valueOf(order.getOrderNumber()) + " ");
+            int orderNum = order.getOrderNumber();
 
-            // TODO - Do something special if we find the order we were looking for.
+            mTextView.append(String.valueOf(orderNum) + " ");
+
+            //
         }
     }
 
     // Called when a user is adding a new order to watch for.
     @OnClick(R.id.button_add_order)
     public void addOrder() {
+        // If we're not bound to the service yet, ask the user to wait.
+        if (!mBound.get()) {
+            Toast.makeText(this, "Starting service. Please try again.", Toast.LENGTH_SHORT);
+            return;
+        }
+
         int orderNum;
         try {
             orderNum = Integer.parseInt(mEditText.getText().toString());
@@ -159,14 +171,35 @@ public class OrderActivity extends Activity {
         }
 
         // Add whatever's in the textbox to the list of orders we're watching.
-        mWatching.add(orderNum);
-        mWatching.notifyDataSetChanged();
+        addReceiptToList(orderNum);
 
         // Tell the service we're looking for another order
         mService.setNotify(orderNum);
 
+        // Start it in the foreground.
+        startService(new Intent(this, QueryService.class));
+
         // Clear the edit text
         mEditText.setText("");
+
+        // Make a toast telling them we'll notify them when it comes up
+        Toast.makeText(this, "We'll notify you when your order is ready. Please keep your receipt.",
+                Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * Makes a text view that looks like a receipt for that order and attaches it to the
+     * LinearLayout
+     */
+    private void addReceiptToList(int orderNum) {
+        // Inflate the receipt view.
+        TextView receipt = (TextView) getLayoutInflater().inflate(R.layout.receipt_item, mLinearLayout, false);
+
+        // Set the text.
+        receipt.setText(String.valueOf(orderNum));
+
+        // Add the receipt
+        mLinearLayout.addView(receipt, 0);
     }
 
 }

@@ -10,6 +10,6 @@ public interface Constants {
     int NEW_DATA = 1;
     int STOP_REQUEST = 2;
     String STOP_ACTION = "STOP";
-    int ORDER_READY_NOTIFICATION = 100;
+    int FOREGROUND_NOTIFICATION = 99;
 
 }
