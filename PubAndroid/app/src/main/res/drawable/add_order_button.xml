@@ -4,8 +4,8 @@
 
     <item
         android:state_pressed="true"
-        android:drawable="@drawable/back_button_pressed"/>
+        android:drawable="@drawable/add_order_button_pressed"/>
 
     <item
-        android:drawable="@drawable/back_button_unpressed"/>
+        android:drawable="@drawable/add_order_button_unpressed"/>
 </selector>
