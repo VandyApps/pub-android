@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -18,7 +19,10 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.util.Log;
+import android.view.View;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -41,8 +45,7 @@ public class OrderActivity extends Activity {
     TextView mTextView;
     @InjectView(R.id.layout_receipt_holder)
     LinearLayout mLinearLayout;
-    @InjectView(R.id.edittext_new_order)
-    EditText mEditText;
+
     private List<Order> mOrders;
 
     private QueryService mService;
@@ -156,23 +159,58 @@ public class OrderActivity extends Activity {
 
     // Called when a user is adding a new order to watch for.
     @OnClick(R.id.button_add_order)
-    public void addOrder() {
-        // If we're not bound to the service yet, ask the user to wait.
-        if (!mBound.get()) {
-            Toast.makeText(this, "Starting service. Please try again.", Toast.LENGTH_SHORT);
+    public void showAddOrderDialog(View v) {
+        if (!mBound.get())
             return;
-        }
+        final Dialog dlg = new Dialog(this);
+        dlg.setContentView(R.layout.dialog_order_prompt);
+        dlg.setTitle(R.string.order_prompt_text);
+        final EditText et = (EditText) dlg.findViewById(R.id.prompt_et);
+        final Button ok = (Button) dlg.findViewById(R.id.prompt_ok_button);
+        final Button cancel = (Button) dlg
+                .findViewById(R.id.prompt_cancel_button);
+        ok.setOnClickListener(new View.OnClickListener() {
 
-        int orderNum;
-        try {
-            orderNum = Integer.parseInt(mEditText.getText().toString());
-        } catch (NumberFormatException e) {
-            Toast.makeText(OrderActivity.this, "Please enter a number",
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
+            @Override
+            public void onClick(View v) {
+                // If we're not bound to the service yet, ask the user to wait.
+                if (!mBound.get()) {
+                    Toast.makeText(getApplicationContext(), "Starting service. Please try again.",
+                            Toast.LENGTH_SHORT);
+                    return;
+                }
 
-        // Add whatever's in the textbox to the list of orders we're watching.
+                int orderNum;
+                try {
+                    orderNum = Integer.parseInt(et.getText().toString());
+                } catch (NumberFormatException e) {
+                    Toast.makeText(OrderActivity.this, "Please enter a number",
+                            Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                addOrder(orderNum);
+
+                dlg.dismiss();
+            }
+
+        });
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dlg.dismiss();
+            }
+        });
+
+        // Show the keyboard.
+        dlg.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
+        dlg.show();
+    }
+
+    private void addOrder(int orderNum) {
+
+        // Add the order to the list of orders we're watching.
         addReceiptToList(orderNum);
 
         // Tell the service we're looking for another order
@@ -180,9 +218,6 @@ public class OrderActivity extends Activity {
 
         // Start it in the foreground.
         startService(new Intent(this, QueryService.class));
-
-        // Clear the edit text
-        mEditText.setText("");
 
         // Make a toast telling them we'll notify them when it comes up
         Toast.makeText(this, "We'll notify you when your order is ready. Please keep your receipt.",

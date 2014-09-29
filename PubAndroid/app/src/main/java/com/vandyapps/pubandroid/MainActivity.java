@@ -1,14 +1,9 @@
 package com.vandyapps.pubandroid;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -34,7 +29,7 @@ public class MainActivity extends ActionBarActivity {
     @OnClick(R.id.button_menu)
     public void checkMenuClicked(View v) {
         // Start the order checking activity.
-        startActivity(new Intent(this, PubMenu.class));
+        startActivity(new Intent(this, MenuActivity.class));
 
     }
 
