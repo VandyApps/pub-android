@@ -22,7 +22,7 @@ public class MenuActivity extends Activity implements AdapterView.OnItemClickLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dialog_menu);
+        setContentView(R.layout.menu_activity);
         adapterSetup();
         entreeList = (ListView) findViewById(R.id.entrees);
         sideList = (ListView) findViewById(R.id.sides);

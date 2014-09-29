@@ -40,6 +40,7 @@
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
                         android:id="@+id/entrees"
+                        android:fadeScrollbars="false"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"/>
                 </LinearLayout>
@@ -56,6 +57,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/sides"
+                        android:fadeScrollbars="false"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"/>
                 </LinearLayout>
@@ -71,6 +73,7 @@
                     <ListView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fadeScrollbars="false"
                         android:id="@+id/sweets"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"/>
