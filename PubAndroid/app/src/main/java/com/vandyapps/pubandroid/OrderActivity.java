@@ -20,6 +20,7 @@ import android.os.Message;
 import android.os.Messenger;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -198,6 +199,10 @@ public class OrderActivity extends Activity {
                 dlg.dismiss();
             }
         });
+
+        // Show the keyboard.
+        dlg.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
         dlg.show();
     }
 

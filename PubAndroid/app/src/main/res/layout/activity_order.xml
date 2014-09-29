@@ -11,15 +11,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
         android:padding="10dp"
         android:background="@drawable/shadow_shape">
 
         <ScrollView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:fadeScrollbars="false">
             <TextView
                 android:id="@+id/number_list"
                 android:layout_width="match_parent"
@@ -44,7 +43,8 @@
         <HorizontalScrollView
             android:layout_width="fill_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:fadeScrollbars="false">
             <LinearLayout
                 android:id="@+id/layout_receipt_holder"
                 android:layout_width="fill_parent"
