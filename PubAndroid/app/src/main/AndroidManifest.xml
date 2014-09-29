@@ -21,6 +21,12 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"></activity>
 
+        <activity
+            android:name=".PubMenu"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"></activity>
+
         <service
             android:name=".QueryService"
             android:enabled="true" />
