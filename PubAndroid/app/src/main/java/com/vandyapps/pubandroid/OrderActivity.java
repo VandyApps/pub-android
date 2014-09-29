@@ -38,10 +38,7 @@ public class OrderActivity extends Activity {
     private static final String TAG = OrderActivity.class.getName();
 
     private AtomicBoolean mBound = new AtomicBoolean(false);
-<<<<<<< HEAD
-    @InjectView(R.id.number_list) ListView mListView;
-    private ArrayAdapter<Integer> mAdapter;
-=======
+
     @InjectView(R.id.number_list)
     TextView mTextView;
     @InjectView(R.id.listview_my_orders)
@@ -50,7 +47,7 @@ public class OrderActivity extends Activity {
     EditText mEditText;
     private ArrayAdapter<Integer> mWatching;
     private List<Order> mOrders;
->>>>>>> master
+//>>>>>>> master
     private QueryService mService;
     private Messenger mMessenger = new Messenger(new PubHandler(this));
     private long mLastUpdated = -1;
