@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    android:layout_height="match_parent"
+    android:padding="30dp"
+    android:background="@drawable/brick_background">
     <TabHost
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@android:color/white"
         android:id="@+id/tabhost"
         android:layout_weight="1"
         >
@@ -19,35 +21,34 @@
             <TabWidget
                 android:id="@android:id/tabs"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"></TabWidget>
+                android:layout_height="wrap_content"/>
 
             <FrameLayout
                 android:id="@android:id/tabcontent"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:background="@drawable/pub_menu"
                >
 
                 <LinearLayout
                     android:id="@+id/Entrees"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
+                    android:background="@color/pub_menu_color"
                     android:orientation="vertical">
 
-
                     <ListView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
                         android:id="@+id/entrees"
                         android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:padding="50dp"/>
+                        android:layout_weight="1"/>
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/Sides"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
+                    android:background="@color/pub_menu_color"
                     android:orientation="vertical">
 
 
@@ -56,14 +57,14 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/sides"
                         android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:padding = "50dp"/>
+                        android:layout_weight="1"/>
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/Sweets"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
+                    android:background="@color/pub_menu_color"
                     android:orientation="vertical">
 
 
@@ -72,18 +73,12 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/sweets"
                         android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:padding = "50dp"/>
+                        android:layout_weight="1"/>
                 </LinearLayout>
-
-
-
-
 
             </FrameLayout>
 
 
         </LinearLayout>
     </TabHost>
-
 </LinearLayout>

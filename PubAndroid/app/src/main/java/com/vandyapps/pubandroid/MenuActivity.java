@@ -1,12 +1,8 @@
 package com.vandyapps.pubandroid;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.ListActivity;
-import android.app.TabActivity;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,9 +11,7 @@ import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import butterknife.InjectView;
-
-public class PubMenu extends Activity implements AdapterView.OnItemClickListener{
+public class MenuActivity extends Activity implements AdapterView.OnItemClickListener{
 
     private TabHost myTabHost;
     private ListView entreeList, sideList, sweetList;
@@ -59,9 +53,9 @@ public class PubMenu extends Activity implements AdapterView.OnItemClickListener
             sweetNames[jj] = Sweets.values()[jj].name;
         }
 
-        entreeAdapter = new ArrayAdapter<String>(PubMenu.this, R.layout.menu_list, entreeNames);
-        sideAdapter = new ArrayAdapter<String>(PubMenu.this, R.layout.menu_list, sideNames); //android.R.layout.simple_selectable_list_item
-        sweetAdapter = new ArrayAdapter<String>(PubMenu.this, R.layout.menu_list, sweetNames);
+        entreeAdapter = new ArrayAdapter<String>(MenuActivity.this, R.layout.menu_list, entreeNames);
+        sideAdapter = new ArrayAdapter<String>(MenuActivity.this, R.layout.menu_list, sideNames); //android.R.layout.simple_selectable_list_item
+        sweetAdapter = new ArrayAdapter<String>(MenuActivity.this, R.layout.menu_list, sweetNames);
     }
 
     private void tabHostSetup(){
@@ -104,9 +98,9 @@ public class PubMenu extends Activity implements AdapterView.OnItemClickListener
                 description = Sweets.values()[position].giveDescription();
         }
         if(description.equals("")){
-            Toast.makeText(PubMenu.this, "No description for this item", Toast.LENGTH_LONG).show();
+            Toast.makeText(MenuActivity.this, "No description for this item", Toast.LENGTH_LONG).show();
         } else {
-            final Dialog dialog = new Dialog(PubMenu.this);
+            final Dialog dialog = new Dialog(MenuActivity.this);
             dialog.setContentView(R.layout.food_description);
             dialog.setTitle(name);
 

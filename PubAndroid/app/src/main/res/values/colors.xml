@@ -2,5 +2,6 @@
 <resources>
     <color name="background_color">#FFFFFF</color>
     <color name="button_text_color">#AD9717</color>
+    <color name="pub_menu_color">#FAFE90</color>
 
 </resources>
