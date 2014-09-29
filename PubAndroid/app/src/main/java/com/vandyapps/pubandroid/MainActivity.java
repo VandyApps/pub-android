@@ -31,6 +31,7 @@ public class MainActivity extends ActionBarActivity {
         startActivity(new Intent(this, OrderActivity.class));
     }
 
+    @OnClick(R.id.button_menu)
     public void checkMenuClicked(View v) {
         // Start the order checking activity.
         startActivity(new Intent(this, PubMenu.class));
