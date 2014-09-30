@@ -40,12 +40,14 @@ public class OrderActivity extends Activity {
     private static final String TAG = OrderActivity.class.getName();
 
     private AtomicBoolean mBound = new AtomicBoolean(false);
+
     @InjectView(R.id.number_list)
     TextView mTextView;
     @InjectView(R.id.layout_receipt_holder)
     LinearLayout mLinearLayout;
 
     private List<Order> mOrders;
+
     private QueryService mService;
     private Messenger mMessenger = new Messenger(new PubHandler(this));
 
