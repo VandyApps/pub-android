@@ -53,9 +53,9 @@ public class MenuActivity extends Activity implements AdapterView.OnItemClickLis
             sweetNames[jj] = Sweets.values()[jj].name;
         }
 
-        entreeAdapter = new ArrayAdapter<String>(MenuActivity.this, R.layout.menu_list, entreeNames);
-        sideAdapter = new ArrayAdapter<String>(MenuActivity.this, R.layout.menu_list, sideNames); //android.R.layout.simple_selectable_list_item
-        sweetAdapter = new ArrayAdapter<String>(MenuActivity.this, R.layout.menu_list, sweetNames);
+        entreeAdapter = new CustomFontArrayAdapter(MenuActivity.this, R.layout.menu_list_item, entreeNames, "chalk.ttf");
+        sideAdapter = new CustomFontArrayAdapter(MenuActivity.this, R.layout.menu_list_item, sideNames, "chalk.ttf");
+        sweetAdapter = new CustomFontArrayAdapter(MenuActivity.this, R.layout.menu_list_item, sweetNames, "chalk.ttf");
     }
 
     private void tabHostSetup(){
