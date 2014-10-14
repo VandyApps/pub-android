@@ -224,7 +224,7 @@ public class QueryService extends Service {
                 .setContentText("Order " + orderNum + " is ready");
 
         // Make our notification make noise
-        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
         b.setSound(alarmSound);
 
         // When they click on the notification, the Activity should open.

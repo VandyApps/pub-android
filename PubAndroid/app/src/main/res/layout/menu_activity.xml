@@ -33,13 +33,15 @@
                     android:id="@+id/Entrees"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:background="@color/pub_menu_color"
+                    android:background="@drawable/chalkboard_background"
                     android:orientation="vertical">
 
                     <ListView
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
                         android:id="@+id/entrees"
+                        android:divider="@null"
+                        android:dividerHeight="0dp"
                         android:fadeScrollbars="false"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"/>
@@ -49,7 +51,7 @@
                     android:id="@+id/Sides"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:background="@color/pub_menu_color"
+                    android:background="@drawable/chalkboard_background"
                     android:orientation="vertical">
 
 
@@ -58,6 +60,8 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/sides"
                         android:fadeScrollbars="false"
+                        android:divider="@null"
+                        android:dividerHeight="0dp"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"/>
                 </LinearLayout>
@@ -66,7 +70,7 @@
                     android:id="@+id/Sweets"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:background="@color/pub_menu_color"
+                    android:background="@drawable/chalkboard_background"
                     android:orientation="vertical">
 
 
@@ -74,6 +78,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fadeScrollbars="false"
+                        android:divider="@null"
+                        android:dividerHeight="0dp"
                         android:id="@+id/sweets"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"/>
