@@ -11,10 +11,16 @@ import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MenuActivity extends Activity implements AdapterView.OnItemClickListener{
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
+public class MenuActivity extends Activity implements AdapterView.OnItemClickListener {
+
+    @InjectView(R.id.entrees) private ListView entreeList;
+    @InjectView(R.id.sides)   private ListView sideList;
+    @InjectView(R.id.sweets)  private ListView sweetList;
 
     private TabHost myTabHost;
-    private ListView entreeList, sideList, sweetList;
     private ArrayAdapter<String> entreeAdapter, sideAdapter, sweetAdapter;
     private String[] entreeNames, sideNames, sweetNames;
 
@@ -23,10 +29,9 @@ public class MenuActivity extends Activity implements AdapterView.OnItemClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu_activity);
+        ButterKnife.inject(this);
+
         adapterSetup();
-        entreeList = (ListView) findViewById(R.id.entrees);
-        sideList = (ListView) findViewById(R.id.sides);
-        sweetList = (ListView) findViewById(R.id.sweets);
         entreeList.setAdapter(entreeAdapter);
         sideList.setAdapter(sideAdapter);
         sweetList.setAdapter(sweetAdapter);
@@ -36,7 +41,7 @@ public class MenuActivity extends Activity implements AdapterView.OnItemClickLis
         tabHostSetup();
     }
 
-    private void adapterSetup(){
+    private void adapterSetup() {
         entreeNames = new String[Entrees.values().length];
         sideNames = new String[Sides.values().length];
         sweetNames = new String[Sweets.values().length];
@@ -112,68 +117,67 @@ public class MenuActivity extends Activity implements AdapterView.OnItemClickLis
     }
 
     public enum Entrees {
-        HARVEST_SALAD("Harvest Salad", "", 0), PUB_SALAD("Pub Salad", "", 1), QUESADILLAS("Quesadillas", "", 2),PUB_BURGER("Pub Burger", "", 3),
-        DR_PRAEGGERS_VEGAN_BURGER("Dr. Praeggers Vegan Burger", "", 4), SOUTHERN_CHICKEN_WRAP("Southern Chicken Wrap", "", 5), NASHVILLE_HOT_CHICKEN("Nashville Hot Chicken", "", 6),
-        BUFFALO_HOT_WINGS("Buffalo Hot Wings", "", 7),SPICED_GRILLED_CHICKEN("Spiced Grilled Chicken", "", 8), CHICKEN_TENDERS("Chicken Tenders", "", 9),
-        PUB_TURKEY_CLUB("Pub Turkey Club", "", 10),POPCORN_SHRIMP("Popcorn Shrimp and Fries Basket", "", 11), SHRIMP_PO_BOY("Shrimp Po Boy", "", 12);
-        public String name, description;
-        public int orderNum;
+        HARVEST_SALAD(0, "Harvest Salad",
+                "Mixed greens with granny smith apple, blue cheese crumbles, " +
+                        "chopped walnuts and dried cranberries with fat free balsamic vinaigrette"),
+        PUB_SALAD(1, "Pub Salad",
+                "Garden greens with cherry tomatoes, cheddar cheese, cucumber, red onion, " +
+                        "croutons and choice of dressing"),
+        QUESADILLAS(2, "Quesadillas",
+                "Three types: \n 1. Buffalo Chicken \n 2. Corn, Black Beans, and Roasted Poblano " +
+                        "Peppers \n 3. Jack and Cheese (Chicken optional) \n (Quesadillas served " +
+                        "with Chipotle Lime dipping sauce and Salsa)"),
+        PUB_BURGER(3, "Pub Burger",
+                "1/3 lb. burger with choice of American, Swiss, Cheddar or Provolone Cheese"),
+        DR_PRAEGGERS_VEGAN_BURGER(4, "Dr. Praeggers Vegan Burger",
+                "Toasted wheat bun with lettuce, tomato, pickle and red onion"),
+        SOUTHERN_CHICKEN_WRAP(5, "Southern Chicken Wrap",
+                "Fried chicken tenders wrapped in a flour tortilla with lettuce, cheddar cheese " +
+                        "and ranch dressing"),
+        NASHVILLE_HOT_CHICKEN(6, "Nashville Hot Chicken",
+                "Open faced sandwich on texas toast with dill pickles"),
+        BUFFALO_HOT_WINGS(7, "Buffalo Hot Wings",
+                "Served with ranch dressing and celery"),
+        SPICED_GRILLED_CHICKEN(8, "Spiced Grilled Chicken",
+                "Toasted bun with lettuce, tomato and red onion with choice of American, Swiss, " +
+                        "Cheddar, or Provolone Cheese"),
+        CHICKEN_TENDERS(9, "Chicken Tenders",
+                ""),
+        PUB_TURKEY_CLUB(10, "Pub Turkey Club",
+                "Turkey, smoked bacon and provolone cheese on asiago ciabatta with lettuce, " +
+                        "tomato and red onion"),
+        POPCORN_SHRIMP(11, "Popcorn Shrimp and Fries Basket",
+                "Deep fried and served with cocktail sauce"),
+        SHRIMP_PO_BOY(12, "Shrimp Po Boy",
+                "French baguette, popcorn shrimp, lettuce, tomato and cajun remoulade");
 
-        private Entrees( String foodName, String foodDescription, int num){
+        public final int orderNum;
+        public final String name;
+        public final String description;
+
+        private Entrees(int num, String foodName, String foodDescription){
             this.name = foodName;
             this.description = foodDescription;
             this.orderNum = num;
         }
 
-        public String giveDescription(){
-            switch(this.orderNum){
-                case 0:
-                    description = "Mixed greens with granny smith apple, blue cheese crumbles, " +
-                            "chopped walnuts and dried cranberries with fat free balsamic vinaigrette";
-                    break;
-                case 1:
-                    description = "Garden greens with cherry tomatoes, cheddar cheese, cucumber, red onion, croutons and choice of dressing";
-                    break;
-                case 2:
-                    description = "Three types: \n 1. Buffalo Chicken \n 2. Corn, Black Beans, and Roasted Poblano Peppers \n " +
-                            "3. Jack and Cheese (Chicken optional) \n (Quesadillas served with Chipotle Lime dipping sauce and Salsa)";
-                    break;
-                case 3:
-                    description = "1/3 lb. burger with choice of American, Swiss, Cheddar or Provolone Cheese";
-                    break;
-                case 4:
-                    description = "Toasted wheat bun with lettuce, tomato, pickle and red onion";
-                    break;
-                case 6:
-                    description = "Open faced sandwich on texas toast with dill pickles";
-                    break;
-                case 5:
-                     description = "Fried chicken tenders wrapped in a flour tortilla with lettuce, cheddar cheese and ranch dressing";
-                    break;
-                case 7:
-                    description = "Served with ranch dressing and celery";
-                    break;
-                case 8:
-                    description = "Toasted bun with lettuce, tomato and red onion with choice of American, Swiss, Cheddar, or Provolone Cheese";
-                    break;
-                case 10:
-                    description = "Turkey, smoked bacon and provolone cheese on asiago ciabatta with lettuce, tomato and red onion";
-                    break;
-                case 11:
-                    description = "Deep fried and served with cocktail sauce";
-                    break;
-                case 12:
-                    description = "French baguette, popcorn shrimp, lettuce, tomato and cajun remoulade";
-                    break;
-            }
+        public String giveDescription() {
             return description;
         }
     }
 
     public enum Sides {
-        PUB_FRIES("Pub Fries", ""), KETTLE_CHIPS("Kettle Chips", ""), TORTILLA_CHIPS("Tortilla Chips", ""), CUT_FRUIT("Cut Fruit", ""),
-        GREEN_SALAD("Green Salad", ""), CHIPS_AND_SALSA("Chips and Salsa", ""), CHIPS_AND_QUESO("Chips and Queso", ""), GUACAMOLE("Guacmole", "");
-        private String name, description;
+        PUB_FRIES("Pub Fries", ""),
+        KETTLE_CHIPS("Kettle Chips", ""),
+        TORTILLA_CHIPS("Tortilla Chips", ""),
+        CUT_FRUIT("Cut Fruit", ""),
+        GREEN_SALAD("Green Salad", ""),
+        CHIPS_AND_SALSA("Chips and Salsa", ""),
+        CHIPS_AND_QUESO("Chips and Queso", ""),
+        GUACAMOLE("Guacamole", "");
+
+        private final String name;
+        private final String description;
 
         private Sides(String foodName, String foodDescription){
             name = foodName;
@@ -186,25 +190,24 @@ public class MenuActivity extends Activity implements AdapterView.OnItemClickLis
     }
 
     public enum Sweets {
-        PUB_CHOCOLATE_CHIP_COOKIE("Pub Chocolate Chip Cookie", "", 0), GHIRARDELLI_BROWNIE("Ghirardelli Brownie", "", 1), MILKSHAKES("Milkshakes", "", 2),
-        ABITA_ROOT_BEER_FLOAT("Abita Root Beer Float", "", 3);
-        private String name;
-        private String description = "";
-        private int orderNum;
+        PUB_CHOCOLATE_CHIP_COOKIE(0, "Pub Chocolate Chip Cookie", ""),
+        GHIRARDELLI_BROWNIE(1, "Ghirardelli Brownie", ""),
+        MILKSHAKES(2, "Milkshakes",
+                "Three flavors: \n 1. Strawberry \n 2. Vanilla \n " +
+                        "3. Chocolate"),
+        ABITA_ROOT_BEER_FLOAT(3, "Abita Root Beer Float", "");
 
-        private Sweets(String foodName, String foodDescription, int num){
+        private final int orderNum;
+        private final String name;
+        private final String description;
+
+        private Sweets(int num, String foodName, String foodDescription){
             this.name = foodName;
             this.description = foodDescription;
             this.orderNum = num;
         }
 
         public String giveDescription(){
-            switch(this.orderNum){
-                case 2:
-                    description = "Three flavors: \n 1. Strawberry \n 2. Vanilla \n " +
-                            "3. Chocolate";
-                    break;
-                }
             return description;
         }
     }
