@@ -1,13 +1,23 @@
 package com.vandyapps.pubandroid;
 
-import android.app.Application;
-import android.test.ApplicationTestCase;
+import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
-/**
- * <a href="http://d.android.com/tools/testing/testing_android.html">Testing Fundamentals</a>
- */
-public class ApplicationTest extends ApplicationTestCase<Application> {
-    public ApplicationTest() {
-        super(Application.class);
+import static org.junit.Assert.*;
+
+@Config(emulateSdk = 18)
+@RunWith(RobolectricTestRunner.class)
+public class ApplicationTest {
+    
+    @Test
+    public void firstTest() {
+        String banana = ((PubApp) Robolectric.application).getBanana();
+        assertEquals(banana, "Banana");
+        
     }
+    
 }
+
