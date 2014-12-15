@@ -49,17 +49,17 @@ public class MenuActivity extends Activity {
 
         TabHost.TabSpec spec1 = myTabHost.newTabSpec("entree_tab");
         spec1.setIndicator("Entrees");
-        spec1.setContent(R.id.Entrees);
+        spec1.setContent(R.id.entrees);
         myTabHost.addTab(spec1);
 
         spec1 = myTabHost.newTabSpec("side_tab");
         spec1.setIndicator("Sides");
-        spec1.setContent(R.id.Sides);
+        spec1.setContent(R.id.sides);
         myTabHost.addTab(spec1);
 
         spec1 = myTabHost.newTabSpec("sweet_tab");
         spec1.setIndicator("Sweets");
-        spec1.setContent(R.id.Sweets);
+        spec1.setContent(R.id.sweets);
         myTabHost.addTab(spec1);
     }
 
