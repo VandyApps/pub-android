@@ -9,5 +9,5 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Small Text"
         android:id="@+id/tvDescription"
-        android:padding="5dp"/>
+        android:padding="16dp"/>
 </LinearLayout>

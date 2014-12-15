@@ -2,10 +2,12 @@ package com.vandyapps.pubandroid;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -14,16 +16,15 @@ import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class MenuActivity extends Activity implements AdapterView.OnItemClickListener {
+import com.vandyapps.pubandroid.view.EnumAdapter;
+import com.vandyapps.pubandroid.view.ViewDecorator;
 
-    @InjectView(R.id.entrees) private ListView entreeList;
-    @InjectView(R.id.sides)   private ListView sideList;
-    @InjectView(R.id.sweets)  private ListView sweetList;
+public class MenuActivity extends Activity {
 
-    private TabHost myTabHost;
-    private ArrayAdapter<String> entreeAdapter, sideAdapter, sweetAdapter;
-    private String[] entreeNames, sideNames, sweetNames;
-
+    @InjectView(R.id.tabhost) TabHost myTabHost;
+    @InjectView(R.id.entrees) ListView entreeList;
+    @InjectView(R.id.sides)   ListView sideList;
+    @InjectView(R.id.sweets)  ListView sweetList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,40 +32,19 @@ public class MenuActivity extends Activity implements AdapterView.OnItemClickLis
         setContentView(R.layout.menu_activity);
         ButterKnife.inject(this);
 
-        adapterSetup();
-        entreeList.setAdapter(entreeAdapter);
-        sideList.setAdapter(sideAdapter);
-        sweetList.setAdapter(sweetAdapter);
-        entreeList.setOnItemClickListener(this);
-        sideList.setOnItemClickListener(this);
-        sweetList.setOnItemClickListener(this);
+        entreeList.setAdapter(createEnumAdapter(Entrees.class));
+        entreeList.setOnItemClickListener(new MenuDetailPopup<>(Entrees.class));
+
+        sideList.setAdapter(createEnumAdapter(Sides.class));
+        sideList.setOnItemClickListener(new MenuDetailPopup<>(Sides.class));
+
+        sweetList.setAdapter(createEnumAdapter(Sweets.class));
+        sweetList.setOnItemClickListener(new MenuDetailPopup<>(Sweets.class));
+
         tabHostSetup();
     }
 
-    private void adapterSetup() {
-        entreeNames = new String[Entrees.values().length];
-        sideNames = new String[Sides.values().length];
-        sweetNames = new String[Sweets.values().length];
-        for(int ii = 0; ii < Entrees.values().length; ii++)
-        {
-            entreeNames[ii] = Entrees.values()[ii].name;
-        }
-        for(int jj = 0; jj < Sides.values().length; jj++)
-        {
-            sideNames[jj] = Sides.values()[jj].name;
-        }
-        for(int jj = 0; jj < Sweets.values().length; jj++)
-        {
-            sweetNames[jj] = Sweets.values()[jj].name;
-        }
-
-        entreeAdapter = new CustomFontArrayAdapter(MenuActivity.this, R.layout.menu_list_item, entreeNames, "chalk.ttf");
-        sideAdapter = new CustomFontArrayAdapter(MenuActivity.this, R.layout.menu_list_item, sideNames, "chalk.ttf");
-        sweetAdapter = new CustomFontArrayAdapter(MenuActivity.this, R.layout.menu_list_item, sweetNames, "chalk.ttf");
-    }
-
     private void tabHostSetup(){
-        myTabHost = (TabHost)findViewById(R.id.tabhost);
         myTabHost.setup();
 
         TabHost.TabSpec spec1 = myTabHost.newTabSpec("entree_tab");
@@ -83,40 +63,58 @@ public class MenuActivity extends Activity implements AdapterView.OnItemClickLis
         myTabHost.addTab(spec1);
     }
 
-
-    public void onItemClick(AdapterView<?> parent, View view, int position,
-                            long id) {
-        String description = "", name = "";
-        switch(parent.getId()){
-            case R.id.entrees:
-                name = Entrees.values()[position].name;
-                description = Entrees.values()[position].giveDescription();
-                break;
-
-            case R.id.sides:
-                name = Sides.values()[position].name;
-                description = Sides.values()[position].giveDescription();
-                break;
-
-            case R.id.sweets:
-                name = Sweets.values()[position].name;
-                description = Sweets.values()[position].giveDescription();
-        }
-        if(description.equals("")){
-            Toast.makeText(MenuActivity.this, "No description for this item", Toast.LENGTH_LONG).show();
-        } else {
-            final Dialog dialog = new Dialog(MenuActivity.this);
-            dialog.setContentView(R.layout.food_description);
-            dialog.setTitle(name);
-
-            TextView text = (TextView) dialog.findViewById(R.id.tvDescription);
-            text.setText(description);
-            dialog.show();
-        }
-
+    private BaseAdapter createEnumAdapter(Class<?> enumClass) {
+        EnumAdapter adapter = new EnumAdapter<>(this, R.layout.menu_list_item, enumClass);
+        adapter.addDecorator(new ChalkDecorator());
+        return adapter;
     }
 
-    public enum Entrees {
+    private static class ChalkDecorator implements ViewDecorator {
+        private static Typeface tf;
+
+        @Override public void decorate(View v) {
+            TextView tv = (TextView) v;
+            tv.setTextColor(Color.WHITE);
+            if (tf == null) {
+                tf = Typeface.createFromAsset(v.getContext().getAssets(), "chalk.ttf");
+            }
+            tv.setTypeface(tf);
+        }
+    }
+
+    private static class MenuDetailPopup<E extends Enum & MenuEntry>
+            implements AdapterView.OnItemClickListener {
+
+        private final E[] enumItem;
+
+        MenuDetailPopup(Class<E> enumClass) {
+            enumItem = enumClass.getEnumConstants();
+        }
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            String name = enumItem[position].getName();
+            String description = enumItem[position].giveDescription();
+            if(description.equals("")){
+                Toast.makeText(parent.getContext(), "No description for this item", Toast.LENGTH_LONG).show();
+            } else {
+                final Dialog dialog = new Dialog(parent.getContext());
+                dialog.setContentView(R.layout.food_description);
+                dialog.setTitle(name);
+
+                TextView text = (TextView) dialog.findViewById(R.id.tvDescription);
+                text.setText(description);
+                dialog.show();
+            }
+        }
+    }
+
+    private static interface MenuEntry {
+        String getName();
+        String giveDescription();
+    }
+
+    public enum Entrees implements MenuEntry {
         HARVEST_SALAD(0, "Harvest Salad",
                 "Mixed greens with granny smith apple, blue cheese crumbles, " +
                         "chopped walnuts and dried cranberries with fat free balsamic vinaigrette"),
@@ -151,9 +149,9 @@ public class MenuActivity extends Activity implements AdapterView.OnItemClickLis
         SHRIMP_PO_BOY(12, "Shrimp Po Boy",
                 "French baguette, popcorn shrimp, lettuce, tomato and cajun remoulade");
 
-        public final int orderNum;
-        public final String name;
-        public final String description;
+        private final int orderNum;
+        private final String name;
+        private final String description;
 
         private Entrees(int num, String foodName, String foodDescription){
             this.name = foodName;
@@ -164,9 +162,13 @@ public class MenuActivity extends Activity implements AdapterView.OnItemClickLis
         public String giveDescription() {
             return description;
         }
+
+        public String getName() { return name; }
+
+        @Override public String toString() { return name; }
     }
 
-    public enum Sides {
+    public enum Sides implements MenuEntry {
         PUB_FRIES("Pub Fries", ""),
         KETTLE_CHIPS("Kettle Chips", ""),
         TORTILLA_CHIPS("Tortilla Chips", ""),
@@ -184,12 +186,16 @@ public class MenuActivity extends Activity implements AdapterView.OnItemClickLis
             description = foodDescription;
         }
 
-        public String giveDescription(){
+        public String giveDescription() {
             return description;
         }
+
+        public String getName() { return name; }
+
+        @Override public String toString() { return name; }
     }
 
-    public enum Sweets {
+    public enum Sweets implements MenuEntry {
         PUB_CHOCOLATE_CHIP_COOKIE(0, "Pub Chocolate Chip Cookie", ""),
         GHIRARDELLI_BROWNIE(1, "Ghirardelli Brownie", ""),
         MILKSHAKES(2, "Milkshakes",
@@ -207,8 +213,15 @@ public class MenuActivity extends Activity implements AdapterView.OnItemClickLis
             this.orderNum = num;
         }
 
-        public String giveDescription(){
+        public String giveDescription() {
             return description;
         }
+
+        public String getName() {
+            return name;
+        }
+
+        @Override public String toString() { return name; }
     }
+
 }
