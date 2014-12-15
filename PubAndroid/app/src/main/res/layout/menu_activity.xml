@@ -26,7 +26,8 @@
                 android:id="@android:id/tabcontent"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:background="@drawable/chalkboard_background">
 
                 <ListView
                     android:id="@+id/entrees"
@@ -34,7 +35,6 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
                     android:padding="4dp"
-                    android:background="@drawable/chalkboard_background"
                     android:divider="@null"
                     android:dividerHeight="0dp"
                     android:fadeScrollbars="false" />
@@ -45,7 +45,6 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
                     android:padding="4dp"
-                    android:background="@drawable/chalkboard_background"
                     android:divider="@null"
                     android:dividerHeight="0dp"
                     android:fadeScrollbars="false" />
@@ -56,7 +55,6 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
                     android:padding="4dp"
-                    android:background="@drawable/chalkboard_background"
                     android:divider="@null"
                     android:dividerHeight="0dp"
                     android:fadeScrollbars="false" />
