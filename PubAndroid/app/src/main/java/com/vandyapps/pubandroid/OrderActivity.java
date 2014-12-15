@@ -41,10 +41,8 @@ public class OrderActivity extends Activity {
 
     private AtomicBoolean mBound = new AtomicBoolean(false);
 
-    @InjectView(R.id.number_list)
-    TextView mTextView;
-    @InjectView(R.id.layout_receipt_holder)
-    LinearLayout mLinearLayout;
+    @InjectView(R.id.number_list) TextView mTextView;
+    @InjectView(R.id.layout_receipt_holder) LinearLayout mLinearLayout;
 
     private List<Order> mOrders;
 
@@ -59,7 +57,7 @@ public class OrderActivity extends Activity {
         WeakReference<OrderActivity> mReference;
 
         PubHandler(OrderActivity a) {
-            mReference = new WeakReference<OrderActivity>(a);
+            mReference = new WeakReference<>(a);
         }
 
         @Override

@@ -26,7 +26,7 @@
                 android:padding="5dp"
                 android:textColor="#FF0000"
                 android:layout_height="wrap_content"
-                android:textSize="30dp"
+                android:textSize="30sp"
                 android:typeface="monospace" />
         </ScrollView>
 
@@ -36,6 +36,7 @@
             android:scaleType="fitCenter"
             android:layout_width="177dp"
             android:layout_height="82dp"
+            android:layout_gravity="center"
             android:adjustViewBounds="true"
             android:src="@drawable/add_order_button"
             android:background="@android:color/transparent" />
