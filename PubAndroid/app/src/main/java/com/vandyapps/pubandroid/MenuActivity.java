@@ -63,7 +63,7 @@ public class MenuActivity extends Activity {
         myTabHost.addTab(spec1);
     }
 
-    private BaseAdapter createEnumAdapter(Class<?> enumClass) {
+    private BaseAdapter createEnumAdapter(Class<? extends Enum> enumClass) {
         EnumAdapter adapter = new EnumAdapter<>(this, R.layout.menu_list_item, enumClass);
         adapter.addDecorator(new ChalkDecorator());
         return adapter;
@@ -115,48 +115,46 @@ public class MenuActivity extends Activity {
     }
 
     public enum Entrees implements MenuEntry {
-        HARVEST_SALAD(0, "Harvest Salad",
+        HARVEST_SALAD("Harvest Salad",
                 "Mixed greens with granny smith apple, blue cheese crumbles, " +
                         "chopped walnuts and dried cranberries with fat free balsamic vinaigrette"),
-        PUB_SALAD(1, "Pub Salad",
+        PUB_SALAD("Pub Salad",
                 "Garden greens with cherry tomatoes, cheddar cheese, cucumber, red onion, " +
                         "croutons and choice of dressing"),
-        QUESADILLAS(2, "Quesadillas",
+        QUESADILLAS("Quesadillas",
                 "Three types: \n 1. Buffalo Chicken \n 2. Corn, Black Beans, and Roasted Poblano " +
                         "Peppers \n 3. Jack and Cheese (Chicken optional) \n (Quesadillas served " +
                         "with Chipotle Lime dipping sauce and Salsa)"),
-        PUB_BURGER(3, "Pub Burger",
+        PUB_BURGER("Pub Burger",
                 "1/3 lb. burger with choice of American, Swiss, Cheddar or Provolone Cheese"),
-        DR_PRAEGGERS_VEGAN_BURGER(4, "Dr. Praeggers Vegan Burger",
+        DR_PRAEGGERS_VEGAN_BURGER("Dr. Praeggers Vegan Burger",
                 "Toasted wheat bun with lettuce, tomato, pickle and red onion"),
-        SOUTHERN_CHICKEN_WRAP(5, "Southern Chicken Wrap",
+        SOUTHERN_CHICKEN_WRAP("Southern Chicken Wrap",
                 "Fried chicken tenders wrapped in a flour tortilla with lettuce, cheddar cheese " +
                         "and ranch dressing"),
-        NASHVILLE_HOT_CHICKEN(6, "Nashville Hot Chicken",
+        NASHVILLE_HOT_CHICKEN("Nashville Hot Chicken",
                 "Open faced sandwich on texas toast with dill pickles"),
-        BUFFALO_HOT_WINGS(7, "Buffalo Hot Wings",
+        BUFFALO_HOT_WINGS("Buffalo Hot Wings",
                 "Served with ranch dressing and celery"),
-        SPICED_GRILLED_CHICKEN(8, "Spiced Grilled Chicken",
+        SPICED_GRILLED_CHICKEN("Spiced Grilled Chicken",
                 "Toasted bun with lettuce, tomato and red onion with choice of American, Swiss, " +
                         "Cheddar, or Provolone Cheese"),
-        CHICKEN_TENDERS(9, "Chicken Tenders",
+        CHICKEN_TENDERS("Chicken Tenders",
                 ""),
-        PUB_TURKEY_CLUB(10, "Pub Turkey Club",
+        PUB_TURKEY_CLUB("Pub Turkey Club",
                 "Turkey, smoked bacon and provolone cheese on asiago ciabatta with lettuce, " +
                         "tomato and red onion"),
-        POPCORN_SHRIMP(11, "Popcorn Shrimp and Fries Basket",
+        POPCORN_SHRIMP("Popcorn Shrimp and Fries Basket",
                 "Deep fried and served with cocktail sauce"),
-        SHRIMP_PO_BOY(12, "Shrimp Po Boy",
+        SHRIMP_PO_BOY("Shrimp Po Boy",
                 "French baguette, popcorn shrimp, lettuce, tomato and cajun remoulade");
 
-        private final int orderNum;
         private final String name;
         private final String description;
 
-        private Entrees(int num, String foodName, String foodDescription){
+        private Entrees(String foodName, String foodDescription){
             this.name = foodName;
             this.description = foodDescription;
-            this.orderNum = num;
         }
 
         public String giveDescription() {
@@ -196,21 +194,19 @@ public class MenuActivity extends Activity {
     }
 
     public enum Sweets implements MenuEntry {
-        PUB_CHOCOLATE_CHIP_COOKIE(0, "Pub Chocolate Chip Cookie", ""),
-        GHIRARDELLI_BROWNIE(1, "Ghirardelli Brownie", ""),
-        MILKSHAKES(2, "Milkshakes",
+        PUB_CHOCOLATE_CHIP_COOKIE("Pub Chocolate Chip Cookie", ""),
+        GHIRARDELLI_BROWNIE("Ghirardelli Brownie", ""),
+        MILKSHAKES("Milkshakes",
                 "Three flavors: \n 1. Strawberry \n 2. Vanilla \n " +
                         "3. Chocolate"),
-        ABITA_ROOT_BEER_FLOAT(3, "Abita Root Beer Float", "");
+        ABITA_ROOT_BEER_FLOAT("Abita Root Beer Float", "");
 
-        private final int orderNum;
         private final String name;
         private final String description;
 
-        private Sweets(int num, String foodName, String foodDescription){
+        private Sweets(String foodName, String foodDescription){
             this.name = foodName;
             this.description = foodDescription;
-            this.orderNum = num;
         }
 
         public String giveDescription() {
