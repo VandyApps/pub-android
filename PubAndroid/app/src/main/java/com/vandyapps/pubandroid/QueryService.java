@@ -120,6 +120,8 @@ public class QueryService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        // This will be triggered by a Pending Intent that is executed
+        // when the user clicks on our Foreground Notification. ("Click here to stop")
         if (intent.getAction() == Constants.STOP_ACTION) {
             // Stop the foreground/started portions of the service
             stopForeground(true);

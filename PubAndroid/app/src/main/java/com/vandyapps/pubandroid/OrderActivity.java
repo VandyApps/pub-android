@@ -153,7 +153,6 @@ public class OrderActivity extends Activity {
 
             mTextView.append(String.valueOf(orderNum) + " ");
 
-            //
         }
     }
 
