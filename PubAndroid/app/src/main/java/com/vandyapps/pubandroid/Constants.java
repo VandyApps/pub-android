@@ -3,7 +3,7 @@ package com.vandyapps.pubandroid;
 public interface Constants {
 
     int MAX_NUM_ORDERS = 75;
-    String SERVER_ADDRESS = "http://campusdining.vanderbilt.edu:7070";
+    String SERVER_ADDRESS = "http://pubapp.mitchgordon.me:7070";
     int REFRESH_RATE = 15;
     String API_KEY = "not_implemented";
 
